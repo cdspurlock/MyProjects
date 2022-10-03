@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casey's Password Generator</title>
+
+    <script src="JS/script.js" defer></script>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    
+    <div class="container">
+        <h1 class="title">Password Generator</h1>
+        <h3>Password</h3>
+        <form class="form">
+           <div class="character-amount-container">
+                <label for="">Number Of Characters</label>
+                <input type="range" min="1" max="50" value="10" id="characterAmountRange">
+                <input class="number-input" type="number" min="1" max="50" value="10" id="characterAmountNumber">
+           </div><br>
+
+                <label for="includeUppercase">Include Uppercase</label>
+                <input type="checkbox" id="includeUppercase">
+
+                <label for="includeNumber">Include Numbers</label>
+                <input type="checkbox" id="includeNumber">
+
+                <label for="includeSymbols">Include Symbols</label>
+                <input type="checkbox" id="includeSymbols">
+            
+
+            <button type="submit">Generate Password</button>
+        </form>
+    </div>
+</body>
+</html>
