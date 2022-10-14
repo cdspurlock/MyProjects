@@ -1,61 +1,93 @@
-const characterAmountRange = document.getElementById('characterAmountRange');
-const characterAmountNumber = document.getElementById('characterAmountNumber');
+//Dom Elements
+const resultEl = document.getElementById('result');
+const lengthEl = document.getElementById('length');
+const uppercaseEl = document.getElementById('uppercase');
+const lowercaseEl = document.getElementById('lowercase');
+const numbersEl = document.getElementById('numbers');
+const symbolsEl = document.getElementById('symbols');
+const generateEl = document.getElementById('generate');
+const clipboard = document.getElementById('clipboard');
 
-const includeUppercaseElement = document.getElementById('includeUppercase');
-const includeNumbersElement = document.getElementById('includeNumbers');
-const includeSymbolsElement = document.getElementById('includeSymbols');
-const form = document.getElementById('passwordGeneratorForm');
-const passwordDisplay = document.getElementById('passwordDisplay');
+const randomFunc = {
+    lower: getRandomLower,
+    upper: getRandomUpper,
+    number: getRandomNumber,
+    symbol: getRandomSymbol
+};
 
-const UPPERCASE_CHAR_CODES = arrayFromLowToHigh(65, 90);
-const LOWERCASE_CHAR_CODES = arrayFromLowToHigh(97, 122);
-const NUMBER_CHAR_CODES = arrayFromLowToHigh(48, 57);
-const SYMBOL_CHAR_CODES = arrayFromLowToHigh(33, 47).concat(
-    arrayFromLowToHigh(58, 64)
-).concat(
-    arrayFromLowToHigh(91, 96)
-).concat(
-    arrayFromLowToHigh(123, 126)
-);
+//Generate Event Listener
+generateEl.addEventListener('click', () => {
+    const length = +lengthEl.value;
+    const hasLower = lowercaseEl.checked;
+    const hasUpper = uppercaseEl.checked;
+    const hasNumber = numbersEl.checked;
+    const hasSymbol = symbolsEl.checked;
 
-characterAmountRange.addEventListener('input', syncCharacterAmount);
-characterAmountNumber.addEventListener('input', syncCharacterAmount);
-
-form.addEventListener('submit', e => {
-    e.preventDefault();
-    const characterAmount = characterAmountNumber.value;
-    const includeUppercase = includeUppercaseElement.checked;
-    const includeNumbers = includeNumbersElement.checked;
-    const includeSymbols = includeSymbolsElement.checked;
-    const Password = generatePassword(characterAmount, characterAmountNumber, includeUppercase,
-    includeNumbers, includeSymbols);
-    passwordDisplay.innerText = Password;
+    resultEl.innerText = generatePassword(hasLower, hasUpper, hasNumber, hasSymbol, length);
 });
 
-function generatePassword(characterAmount, includeUppercase, includeNumbers, includeSymbols) {
-    let charCodes = LOWERCASE_CHAR_CODES;
-    if (includeUppercase) charCodes = charCodes.concat(UPPERCASE_CHAR_CODES);
-    if (includeSymbols) charCodes = charCodes.concat(SYMBOL_CHAR_CODES);
-    if (includeNumbers) charCodes = charCodes.concat(NUMBER_CHAR_CODES);
+//Copy Password to Clipboard
+clipboard.addEventListener('click', () => {
+    const textarea = document.createElement('textarea');
+    const password = resultEl.innerText;
 
-    const passwordCharacters = [];
-    for (let i = 0; i < characterAmount; i++) {
-        const characterCode = charCodes[Math.floor(Math.random() * charCodes.length)];
-        passwordCharacters.push(String.fromCharCode(characterCode));
+    if (!password) { 
+        return; 
     }
-    return passwordCharacters.join('');
+
+    textarea.value = password;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    textarea.remove();
+    alert('Password copied to clipboard!');
+});
+
+//Generate Password Function
+function generatePassword(lower, upper, number, symbol, length) {
+    //1. Init password variable
+    //2. Filter out unchecked types
+    //3. Loop over length call generator function for each type
+    //4. Add final password to the password variable and return
+
+    let generatedPassword = '';
+
+    const typesCount = lower + upper + number + symbol;
+
+    const typesArr = [{lower}, {upper}, {number}, {symbol}].filter
+    (item => Object.values(item)[0]);
+
+    if(typesCount === 0) {
+        return '';
+    }
+
+    for(let i=0; i < length; i += typesCount) {
+        typesArr.forEach(type => {
+            const funcName = Object.keys(type)[0];
+
+            generatedPassword += randomFunc[funcName]();
+        });
+    }
+
+    const finalPassword = generatedPassword.slice(0, length);
+
+    return finalPassword;
+}
+// Generator Functions
+
+function getRandomLower() {
+    return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
 }
 
-function arrayFromLowToHigh(low, high) {
-    const array = [];
-    for (let i = low; i <= high; i++) {
-        array.push(i);
-    }
-    return array;
+function getRandomUpper() {
+    return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
 }
 
-function syncCharacterAmount(e) {
-    const value = e.target.value;
-    characterAmountNumber.value = value;
-    characterAmountRange.value = value;
+function getRandomNumber() {
+    return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+}
+
+function getRandomSymbol() {
+    const symbols = '!@#$%^&*(){}[]=<>/,.';
+    return symbols[Math.floor(Math.random() * symbols.length)];
 }

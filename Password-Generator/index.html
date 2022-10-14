@@ -4,39 +4,45 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casey's Password Generator</title>
-
+    <title>ES Password Generator</title>
     <script src="JS/script.js" defer></script>
     <link rel="stylesheet" href="CSS/style.css">
+    <script src="https://kit.fontawesome.com/e545b3e9ec.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    
-    <div class="container">
-        <h1 class="title">Password Generator</h1>
-        <h3 class="password-display" id="passwordDisplay">Password</h3>
-        <form id="passwordGeneratorForm" class="form">
-           <div class="character-amount-container">
-                <label for="">Number Of Characters</label>
-                <input type="range" min="1" max="50" value="10" id="characterAmountRange">
-                <input class="number-input" type="number" min="1" max="50" value="10" id="characterAmountNumber">
-           </div><br>
-
-            <div class="checkboxes">
-                <label for="includeUppercase">Include Uppercase</label>
-                <input type="checkbox" id="includeUppercase">
-
-                <label for="includeNumber">Include Numbers</label>
-                <input type="checkbox" id="includeNumber">
-
-                <label for="includeSymbols">Include Symbols</label>
-                <input type="checkbox" id="includeSymbols">
+    <div class="background">
+        <div class="container">
+            <h2>Password Generator</h2>
+        </div>
+        <div class="result-container">
+            <span id="result"></span>
+            <button class="btn btn-small" id="clipboard"><i class="far fa-clipboard"></i></button>
+        </div>
+        <div class="settings">
+            <div class="settings-length">
+                <label for="length">Password Length</label>
+                <input type="number" id="length" value="8" min="8" max="25">
             </div>
-            
-
-            <button class="btn" type="submit">Generate Password</button>
-        </form>
-    </div>
-
-    
+            <div class="settings-include">
+                <label for="uppercase">Include Uppercase</label>
+                <input type="checkbox" id="uppercase">
+            </div>
+            <div class="settings-include">
+                <label for="lowercase">Include Lowercase</label>
+                <input type="checkbox" id="lowercase">
+            </div>
+            <div class="settings-include">
+                <label for="numbers">Include Numbers</label>
+                <input type="checkbox" id="numbers">
+            </div>
+            <div class="settings-include">
+                <label for="symbols">Include Symbols</label>
+                <input type="checkbox" id="symbols">
+            </div>
+        </div>
+        <div class="btn-container">
+            <button class="btn" id="generate">Generate Password</button>
+        </div>
+    </div> 
 </body>
 </html>
